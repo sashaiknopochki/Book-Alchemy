@@ -1,9 +1,15 @@
-from flask import Flask
+from flask import Flask, jinja2
 from flask_sqlalchemy import SQLAlchemy
-import jinja2
 import sqlalchemy
+import os
+from data_models import db, Author, Book
+
 
 app = Flask(__name__)
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'data/library.sqlite')}"
+db.init_app(app)
+
 
 @app.route('/')
 def hello_world():
