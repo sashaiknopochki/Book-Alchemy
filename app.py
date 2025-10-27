@@ -63,5 +63,12 @@ def handle_book():
     return render_template('add_book.html', authors=authors, current_year=datetime.now().year)
 
 
+@app.route('/search')
+def search(query: str = None):
+    if not query:
+        return redirect(url_for('home'))
+    query = request.form["query"]
+    return render_template(search.html, query=query)
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5001, debug=True)
