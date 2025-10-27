@@ -2,6 +2,7 @@ from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy
 import os
+from datetime import datetime
 from data_models import db, Author, Book
 
 
@@ -17,7 +18,17 @@ with app.app_context():
 @app.route('/add_author', methods=['GET', 'POST'])
 def handle_author():
     if request.method == 'POST':
-        pass
+        birth_date_str = request.form["birthdate"]
+        death_date_str = request.form["date_of_death"]
+
+        author = Author(
+            name=request.form["name"],
+            birth_date=datetime.strptime(birth_date_str, "%Y-%m-%d").date() if birth_date_str else None,
+            date_of_death=datetime.strptime(death_date_str, "%Y-%m-%d").date() if death_date_str else None
+        )
+        db.session.add(author)
+        db.session.commit()
+        return render_template('home.html')
     return render_template('add_author.html')
 
 
