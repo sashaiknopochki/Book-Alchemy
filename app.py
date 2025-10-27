@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy
 import os
@@ -14,9 +14,11 @@ with app.app_context():
   db.create_all()
 
 
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
+@app.route('/add_author', methods=['GET', 'POST'])
+def handle_author():
+    if request.method == 'POST':
+        pass
+    return render_template('add_author.html')
 
 
 if __name__ == '__main__':

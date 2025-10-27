@@ -13,7 +13,12 @@ class Author(db.Model):
     date_of_death = db.Column(db.Date)
 
     def __repr__(self):
-        return f'Author = (id = {self.id}, name = {self.name}, birth_date = {self.birth_date}, date_of_death = {self.date_of_death})'
+        return (f'Author = ('
+                f'id = {self.id}, '
+                f'name = {self.name}, '
+                f'birth_date = {self.birth_date}, '
+                f'date_of_death = {self.date_of_death})')
+
 
     def __str__(self):
         return f'{self.id}. {self.name} ({self.birth_date}–{self.date_of_death})'
