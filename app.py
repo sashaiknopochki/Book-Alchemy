@@ -17,7 +17,7 @@ db.init_app(app)
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('home.html', books=Book.query.all())
 
 
 @app.route('/add_author', methods=['GET', 'POST'])
