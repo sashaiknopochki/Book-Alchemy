@@ -6,6 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
   </head>
   <body>
+  <h1>Welcome to the Book Alchemy</h1>
+  <a href="/add_book">Add a Book</a>
+  <a href="/add_author">Add an Author</a><br><br>
+  <form method="GET" action="/">
+      <label for="sorting">Sort by:</label>
+      <select name="sorting" id="sorting" onchange="this.form.submit()">
+          <option value="recently_added" {% if sort_by == 'recently_added' %}selected{% endif %}>Recently added</option>
+          <option value="title" {% if sort_by == 'title' %}selected{% endif %}>Title</option>
+          <option value="author" {% if sort_by == 'author' %}selected{% endif %}>Author</option>
+      </select>
+  </form>
 
     {% for book in books %}
     <div>

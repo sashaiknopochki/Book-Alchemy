@@ -17,7 +17,16 @@ db.init_app(app)
 
 @app.route('/')
 def home():
-    return render_template('home.html', books=Book.query.all())
+    sort_by = request.args.get('sorting', 'recently_added')
+
+    if sort_by == 'title':
+        books = Book.query.order_by(Book.title).all()
+    elif sort_by == 'author':
+        books = Book.query.join(Author).order_by(Author.name).all()
+    else:  # recently_added (default)
+        books = Book.query.order_by(Book.id.desc()).all()
+
+    return render_template('home.html', books=books, sort_by=sort_by)
 
 
 @app.route('/add_author', methods=['GET', 'POST'])
@@ -51,7 +60,7 @@ def handle_book():
         return redirect(url_for('home'))
 
     authors = Author.query.all()
-    return render_template('add_book.html', authors=authors)
+    return render_template('add_book.html', authors=authors, current_year=datetime.now().year)
 
 
 if __name__ == '__main__':

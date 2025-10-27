@@ -13,7 +13,7 @@
       <label for="publication_year">Publication year:</label>
       <select id="publication_year" name="publication_year" required>
           <option value="">Select a year</option>
-          {% for year in range(2025, 1449, -1) %}
+          {% for year in range(current_year, 1449, -1) %}
           <option value="{{ year }}">{{ year }}</option>
           {% endfor %}
 </select><br><br>
