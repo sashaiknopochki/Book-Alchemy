@@ -70,17 +70,16 @@ def search(query: str = None):
     # Request books where title OR author contains the query from the database
     if query:
         search_pattern = f'%{query.lower()}%'
-        books = Book.query.filter(
+        results = Book.query.join(Author).filter(
             or_(
                 func.lower(Book.title).like(search_pattern),
-                func.lower(Book.author).like(search_pattern)
+                func.lower(Author.name).like(search_pattern)
             )
         ).all()
-        print(books)
     else:
-        books = []
+        results = []
     # Render the search results page
-    return render_template('search.html', books=books, query=query)
+    return render_template('search.html', results=results, query=query)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5001, debug=True)
