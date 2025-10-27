@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-import sqlalchemy
+from sqlalchemy import or_, func
 import os
 from datetime import datetime
 from data_models import db, Author, Book
@@ -65,10 +65,22 @@ def handle_book():
 
 @app.route('/search')
 def search(query: str = None):
-    if not query:
-        return redirect(url_for('home'))
-    query = request.form["query"]
-    return render_template(search.html, query=query)
+    # Get query from form
+    query = request.args.get('query', '')
+    # Request books where title OR author contains the query from the database
+    if query:
+        search_pattern = f'%{query.lower()}%'
+        books = Book.query.filter(
+            or_(
+                func.lower(Book.title).like(search_pattern),
+                func.lower(Book.author).like(search_pattern)
+            )
+        ).all()
+        print(books)
+    else:
+        books = []
+    # Render the search results page
+    return render_template('search.html', books=books, query=query)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5001, debug=True)
