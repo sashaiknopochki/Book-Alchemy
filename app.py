@@ -1,4 +1,4 @@
-from flask import Flask, jinja2
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy
 import os
@@ -10,6 +10,9 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'data/library.sqlite')}"
 db.init_app(app)
 
+with app.app_context():
+  db.create_all()
+
 
 @app.route('/')
 def hello_world():
@@ -17,4 +20,4 @@ def hello_world():
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5002, debug=True)
+    app.run(host="0.0.0.0", port=5001, debug=True)
