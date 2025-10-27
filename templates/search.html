@@ -4,16 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Book Alchemy - Search Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   </head>
   <body>
-  <h1>Search results for {{ query }}</h1>
-  <a href="/">Add an Author</a><br><br>
-    {% for book in results %}
-    <div>
-        <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg" alt="{{ book.title }}">
-        <h3>{{ book.title }}</h3>
-        <p>{{ book.author.name }}</p>
+    <div class="container">
+      <h1>Search Results</h1>
+
+      <div class="nav-links">
+        <a href="/">Back to Home</a>
+      </div>
+
+      <div class="search-info">
+        <p>{{ count }} result{% if count != 1 %}s{% endif %} for "{{ query }}"</p>
+      </div>
+
+      {% if results %}
+      <div class="books-grid">
+        {% for book in results %}
+        <div class="book-card">
+            <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg"
+                 alt="{{ book.title }}"
+                 onerror="this.onerror=null; this.src='https://via.placeholder.com/180x280?text=No+Cover';">
+            <h3>{{ book.title }}</h3>
+            <p>{{ book.author.name }}</p>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="no-results">
+        <p>No books found matching your search.</p>
+      </div>
+      {% endif %}
     </div>
-    {% endfor %}
   </body>
 </html>

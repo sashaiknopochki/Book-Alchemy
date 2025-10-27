@@ -79,7 +79,17 @@ def search(query: str = None):
     else:
         results = []
     # Render the search results page
-    return render_template('search.html', results=results, query=query)
+    return render_template('search.html', results=results, query=query, count=len(results))
+
+
+@app.route('/book/<int:book_id>/delete', methods=['POST'])
+def delete_book(book_id: int):
+    book = Book.query.get(book_id)
+    print(book)
+    db.session.delete(book)
+    db.session.commit()
+    return redirect(url_for('home'))
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5001, debug=True)

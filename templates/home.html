@@ -4,30 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Book Alchemy - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   </head>
   <body>
-  <h1>Welcome to the Book Alchemy</h1>
-  <a href="/add_book">Add a Book</a>
-  <a href="/add_author">Add an Author</a><br><br>
-  <form method="GET" action="/search">
-      <input type="text" name="query" value="{{ query }}" placeholder="Search by title or author">
-      <input type="submit" value="Search"><br><br>
-  </form>
-  <form method="GET" action="/">
-      <label for="sorting">Sort by:</label>
-      <select name="sorting" id="sorting" onchange="this.form.submit()">
-          <option value="recently_added" {% if sort_by == 'recently_added' %}selected{% endif %}>Recently added</option>
-          <option value="title" {% if sort_by == 'title' %}selected{% endif %}>Title</option>
-          <option value="author" {% if sort_by == 'author' %}selected{% endif %}>Author</option>
-      </select><br><br>
-  </form>
+    <div class="container">
+      <h1>Welcome to Book Alchemy</h1>
 
-    {% for book in books %}
-    <div>
-        <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg" alt="{{ book.title }}">
-        <h3>{{ book.title }}</h3>
-        <p>{{ book.author.name }}</p>
+      <div class="nav-links">
+        <a href="/add_book">Add a Book</a>
+        <a href="/add_author">Add an Author</a>
+      </div>
+
+      <form method="GET" action="/search" class="search-form">
+          <input type="text" name="query" value="{{ query }}" placeholder="Search by title or author">
+          <input type="submit" value="Search">
+      </form>
+
+      <form method="GET" action="/" class="sort-form">
+          <label for="sorting">Sort by:</label>
+          <select name="sorting" id="sorting" onchange="this.form.submit()">
+              <option value="recently_added" {% if sort_by == 'recently_added' %}selected{% endif %}>Recently added</option>
+              <option value="title" {% if sort_by == 'title' %}selected{% endif %}>Title</option>
+              <option value="author" {% if sort_by == 'author' %}selected{% endif %}>Author</option>
+          </select>
+      </form>
+
+      <div class="books-grid">
+        {% for book in books %}
+        <div class="book-card">
+            <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg"
+                 alt="{{ book.title }}"
+                 onerror="this.onerror=null; this.src='https://via.placeholder.com/180x280?text=No+Cover';">
+            <h3>{{ book.title }}</h3>
+            <p>{{ book.author.name }}</p>
+            <form action="/book/{{ book.id }}/delete" method="POST">
+                <button type="submit" class="delete-btn">Delete</button>
+            </form>
+        </div>
+        {% endfor %}
+      </div>
     </div>
-    {% endfor %}
   </body>
 </html>
